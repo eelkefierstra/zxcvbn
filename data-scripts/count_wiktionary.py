@@ -74,7 +74,7 @@ def main(wiktionary_html_root, output_filename):
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print usage()
+        print(usage())
     else:
         main(*sys.argv[1:])
     sys.exit(0)

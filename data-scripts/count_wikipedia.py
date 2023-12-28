@@ -12,7 +12,7 @@ import warnings
 from unidecode import unidecode
 
 def usage():
-    print '''
+    print('''
 tokenize a directory of text and count unigrams.
 
 usage:
@@ -48,7 +48,7 @@ and articles but not previous revisions, edit history, and metadata.
 Then run:
 ./WikiExtractor.py -o en_sents --no-templates enwiki-20151002-pages-articles.xml.bz2
 
-''' % sys.argv[0]
+''' % sys.argv[0])
 
 SENTENCES_PER_BATCH = 500000 # after each batch, delete all counts with count == 1 (hapax legomena)
 PRE_SORT_CUTOFF = 300        # before sorting, discard all words with less than this count
@@ -110,7 +110,7 @@ class TopTokenCounter(object):
 
     def pre_sort_prune(self):
         under_cutoff = set()
-        for token, count in self.count.iteritems():
+        for token, count in self.count.items():
             if count < PRE_SORT_CUTOFF:
                 under_cutoff.add(token)
         for token in under_cutoff:
@@ -129,7 +129,7 @@ class TopTokenCounter(object):
 
 def main(input_dir_str, output_filename):
     counter = TopTokenCounter()
-    print counter.get_ts(), 'starting...'
+    print(counter.get_ts(), 'starting...')
     lines = 0
     for root, dirs, files in os.walk(input_dir_str, topdown=True):
         if not files:
@@ -148,17 +148,17 @@ def main(input_dir_str, output_filename):
                 lines += 1
                 if lines % SENTENCES_PER_BATCH == 0:
                     counter.batch_prune()
-                    print counter.get_stats()
-                    print 'processing: %s' % path
-    print counter.get_stats()
-    print 'deleting tokens under cutoff of', PRE_SORT_CUTOFF
+                    print(counter.get_stats())
+                    print('processing: %s' % path)
+    print(counter.get_stats())
+    print('deleting tokens under cutoff of', PRE_SORT_CUTOFF)
     counter.pre_sort_prune()
-    print 'done'
-    print counter.get_stats()
-    print counter.get_ts(), 'sorting...'
+    print('done')
+    print(counter.get_stats())
+    print(counter.get_ts(), 'sorting...')
     sorted_pairs = counter.get_sorted_pairs()
-    print counter.get_ts(), 'done'
-    print 'writing...'
+    print(counter.get_ts(), 'done')
+    print('writing...')
     with codecs.open(output_filename, 'w', 'utf8') as f:
         for token, count in sorted_pairs:
             f.write('%-18s %d\n' % (token, count))
